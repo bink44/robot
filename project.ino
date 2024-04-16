@@ -169,19 +169,19 @@ bool in_dead_zone[]={0,0,0,0}; //0=not, 1=in
 
 void tail(){
 
-  int pitch = 140;
-  dxl.setGoalPosition(5,pitch, UNIT_DEGREE);
+  
 
-  if(target != end){
+  while(target != end){
   DEBUG_SERIAL.println(target);
   dxl.setGoalPosition(6,target, UNIT_DEGREE);
-  delay(10);
+  delay(15);
   target = target + 1;
   }
   
 
 }
 
+int kev = 100;
 
 void loop() {
   // put your main code here, to run repeatedly:
@@ -192,9 +192,25 @@ void loop() {
   DEBUG_SERIAL.println(elapsed);
   
 //Lift Tail Up
-  dxl.setGoalPosition(5,30, UNIT_DEGREE);
+  //dxl.setGoalPosition(5,30, UNIT_DEGREE);
 
-//Start Tail Movement
+if(elapsed > 5000){
+
+  
+  int pitch = 180;
+  
+  if(pitch != kev){
+  dxl.setGoalPosition(5,kev, UNIT_DEGREE);
+  delay(10);
+  kev = kev + 1;
+  }
+
+}
+
+
+
+
+//Start sweep Movement
   if(elapsed > 6000){
     DEBUG_SERIAL.println("TAIL");
     dxl.setGoalPosition(6,target, UNIT_DEGREE);
@@ -202,8 +218,14 @@ void loop() {
   }
   
 //END ALL
-  if(target == end)
+  if(target == end){
+    delay(2000);
+    dxl.setGoalPosition(5,30, UNIT_DEGREE);
+    delay(500);
+    dxl.setGoalPosition(6,100, UNIT_DEGREE);
     while(1);
+    }
+    
 
 
   if (elapsed-last_time>time_step){
